@@ -3,10 +3,22 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:\\Users\\Thomas\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",
-                "C:\\Users\\Thomas\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.5.2\\**"
+                "${workspaceRoot}",
+                "${workspaceRoot}\\\\libraries\\\\",
+                "D:\\\\Projects\\\\TiltMe\\\\source\\\\libraries\\\\",
+                "C:\\\\Users\\\\Thomas\\\\AppData\\\\Local\\\\Arduino15\\\\packages\\\\esp8266\\\\tools\\\\**",
+                "C:\\\\Users\\\\Thomas\\\\AppData\\\\Local\\\\Arduino15\\\\packages\\\\esp8266\\\\hardware\\\\esp8266\\\\2.5.2\\\\**"
             ],
-            "forcedInclude": []
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "path": [
+                    "${workspaceRoot}\\\\libraries",
+                    "D:\\\\Projects\\\\TiltMe\\\\source\\\\libraries"
+                ]
+              },
+            "forcedInclude": [],
+            "intelliSenseMode": "msvc-x64"
         }
-    ]
+    ],
+    "version": 4
 }

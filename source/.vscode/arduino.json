@@ -1,6 +1,7 @@
 {
-    "sketch": "iSpindel.ino",
+    "sketch": "tiltme.ino",
     "output": "build",
     "board": "esp8266:esp8266:d1_mini_pro",
-    "configuration": "xtal=80,vt=flash,exception=disabled,ssl=all,eesz=16M14M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200"
+    "configuration": "xtal=80,vt=flash,exception=disabled,ssl=all,eesz=16M14M,ip=lm2f,dbg=Serial1,lvl=None____,wipe=none,baud=115200",
+    "port": "COM5"
 }
