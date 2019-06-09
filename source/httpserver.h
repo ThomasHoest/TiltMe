@@ -25,13 +25,14 @@ class HttpServer
     public:
     
     HttpServer();
-    HttpServer(WiFiServer server);
+    HttpServer(WiFiServer *server);
     ~HttpServer();    
 
     void CreateResponse();
 
     private:
     WiFiServer *_server;
+    int _ledValue;
 };
 
 #endif
