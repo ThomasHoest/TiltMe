@@ -18,14 +18,16 @@
 #include <WiFiUdp.h>
 
 //#include "libraries/httpserver/httpserver.h"
+#include "wifimanager.h"
 #include "httpserver.h"
 
 const char *ssid = "supernet";             //your WiFi Name
 const char *password = "thishouseisclean"; //Your Wifi Password
 int ledPin = 03;
 
-WiFiServer server(80);
+//WiFiServer server(80);
 HttpServer *_httpServer;
+WifiManager *_wifiManager;
 
 void setup()
 {
@@ -33,28 +35,11 @@ void setup()
     delay(10);
     pinMode(ledPin, OUTPUT);
     digitalWrite(ledPin, LOW);
-    Serial.println();
-    Serial.println();
-    Serial.print("Connecting to ");
-    Serial.println(ssid);
-    WiFi.begin(ssid, password);
-
-    while (WiFi.status() != WL_CONNECTED)
-    {
-        delay(500);
-        Serial.print(".");
-    }
-
-    Serial.println("");
-    Serial.println("WiFi connected");
-    server.begin();
-    Serial.println("Server started");
-    Serial.print("Use this URL to connect: ");
-    Serial.print("http://");
-    Serial.print(WiFi.localIP());
-    Serial.println("/");
-
-    _httpServer = new HttpServer(&server);
+    
+    _wifiManager = new WifiManager((char*)ssid, (char*)password);
+    _wifiManager->Connect();
+    _wifiManager->StartServer();
+    _httpServer = new HttpServer(_wifiManager);
 }
 
 void loop()

@@ -1,5 +1,5 @@
-#ifndef httpserver_h
-#define httpserver_h
+#ifndef wifimanager_h
+#define wifimanager_h
 
 #include <BearSSLHelpers.h>
 #include <CertStoreBearSSL.h>
@@ -20,20 +20,21 @@
 #include <WiFiServerSecureBearSSL.h>
 #include <WiFiUdp.h>
 
-#include "wifimanager.h"
-
-class HttpServer
+class WifiManager
 {
-    public:
-    
-    HttpServer();
-    HttpServer(WifiManager *manager);
-    ~HttpServer();    
-    void CreateResponse();    
+    public:    
+    WifiManager();
+    WifiManager(char *ssid, char *password);
+    ~WifiManager();    
 
+    void Connect();
+    void StartServer();
+    WiFiServer *GetServer();
+    
     private:
-    WifiManager *_manager;
-    int _ledValue;
+    char *_ssid;
+    char *_password;
+    WiFiServer *_server;
 };
 
 #endif

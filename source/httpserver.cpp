@@ -6,9 +6,9 @@ HttpServer::HttpServer()
 {
 }
 
-HttpServer::HttpServer(WiFiServer *server)
+HttpServer::HttpServer(WifiManager *manager)
 {
-    _server = server;
+    _manager = manager;
     _ledValue = LOW;
 }
 
@@ -18,7 +18,7 @@ HttpServer::~HttpServer()
 
 void HttpServer::CreateResponse()
 {
-    WiFiClient client = _server->available();
+    WiFiClient client = _manager->GetServer()->available();
 
     if (!client)
     {
