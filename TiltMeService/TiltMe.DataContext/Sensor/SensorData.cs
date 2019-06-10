@@ -11,7 +11,8 @@ namespace TiltMe.DataContext.Sensor
         private CloudTable _sensorTable;
         private Mapper _mapper;
 
-        public SensorData()
+        public SensorData(IApplicationConfiguration applicationConfiguration)
+            : base(applicationConfiguration)
         {
             _sensorTable = _tableClient.GetTableReference(nameof(SensorData));
             _sensorTable.CreateIfNotExistsAsync();

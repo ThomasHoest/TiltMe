@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Configuration;
 using System.Threading.Tasks;
+using AutoMapper.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using TiltMe.Models;
 
 namespace TiltMe.DataContext.TableStorage
 {
@@ -10,12 +12,11 @@ namespace TiltMe.DataContext.TableStorage
     {
         protected CloudTableClient _tableClient;
 
-        public TableDbContext()
+        public TableDbContext(IApplicationConfiguration applicationConfiguration)
         {
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.ConnectionStrings["StorageConnectionString"].ConnectionString);
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(applicationConfiguration.TableStorageConnectionString);
             _tableClient = storageAccount.CreateCloudTableClient();
         }
-
 
         protected async Task<bool> Exists<T>(CloudTable table, T entity) where T : TableEntity
         {

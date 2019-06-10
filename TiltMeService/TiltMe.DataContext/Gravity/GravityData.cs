@@ -11,7 +11,8 @@ namespace TiltMe.DataContext.Gravity
         private CloudTable _userTable;
         private IMapper _mapper;
 
-        public GravityData()
+        public GravityData(IApplicationConfiguration applicationConfiguration)
+            : base(applicationConfiguration)
         {
             _userTable = _tableClient.GetTableReference(nameof(GravityData));
             _userTable.CreateIfNotExistsAsync();
