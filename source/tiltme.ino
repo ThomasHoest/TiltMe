@@ -20,6 +20,7 @@
 //#include "libraries/httpserver/httpserver.h"
 #include "wifimanager.h"
 #include "httpserver.h"
+#include "Scheduler.h"
 
 const char *ssid = "supernet";             //your WiFi Name
 const char *password = "thishouseisclean"; //Your Wifi Password
@@ -28,6 +29,17 @@ int ledPin = 03;
 //WiFiServer server(80);
 HttpServer *_httpServer;
 WifiManager *_wifiManager;
+Scheduler *_scheduler;
+
+void testLoop()
+{
+    Serial.println("testloop 1");
+}
+
+void testLoop2()
+{
+    Serial.println("testloop 2");
+}
 
 void setup()
 {
@@ -40,9 +52,14 @@ void setup()
     _wifiManager->Connect();
     _wifiManager->StartServer();
     _httpServer = new HttpServer(_wifiManager);
+
+    _scheduler = new Scheduler();    
+    _scheduler->ScheduleTask(testLoop, 1000);
+    _scheduler->ScheduleTask(testLoop2, 4500);
 }
 
 void loop()
 {
-    _httpServer->CreateResponse();
+    _scheduler->Tick();
+    _httpServer->CreateResponse();    
 }
