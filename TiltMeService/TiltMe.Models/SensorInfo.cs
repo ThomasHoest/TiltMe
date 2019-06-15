@@ -3,8 +3,11 @@
 namespace TiltMe.Models
 {
     public class SensorInfo
-    {   
-        private string SensorId { get; set; }
-        private DateTime Created { get; set; }
+    {
+        public string OwnerEmail { get; set; }
+
+        public string SensorId { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }

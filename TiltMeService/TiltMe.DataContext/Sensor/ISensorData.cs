@@ -1,9 +1,14 @@
 ﻿using System.Threading.Tasks;
+using TiltMe.Models;
 
 namespace TiltMe.DataContext.Sensor
 {
     public interface ISensorData
     {
-        Task SaveNewSensor(string id);
+        Task<bool> SaveNewSensor(SensorInfo sensor);
+
+        Task<bool> SensorExists(SensorInfo sensor);
+
+        Task<SensorInfo> GetSensorById(string sensorId, string ownerEmail);
     }
 }

@@ -16,8 +16,9 @@ namespace TiltMe.Service.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post(int value, string sensorId)
         {
+            _tiltMeDataService.CreateMeasurement(sensorId, value);
         }
     }
 }

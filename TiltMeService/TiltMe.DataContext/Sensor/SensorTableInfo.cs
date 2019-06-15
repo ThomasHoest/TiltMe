@@ -7,10 +7,20 @@ namespace TiltMe.DataContext.Sensor
     {
         public SensorTableInfo()
         {
+            
+        }
+
+        public SensorTableInfo(string sensorId, string ownerEmail)
+        {
+            RowKey = SensorId = sensorId;
+            PartitionKey = OwnerEmail = ownerEmail;
             Created = DateTime.UtcNow;
         }
 
-        private string SensorId { get; set; }
-        private DateTime Created { get; set; }
+        public string OwnerEmail { get; set; }
+
+        public string SensorId { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }

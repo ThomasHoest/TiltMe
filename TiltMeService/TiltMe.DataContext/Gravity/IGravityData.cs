@@ -1,10 +1,11 @@
 ﻿
 using System.Threading.Tasks;
+using TiltMe.Models;
 
 namespace TiltMe.DataContext.Gravity
 {
     public interface IGravityData
     {
-        Task SaveGravity(int gravity, string sensorId);
+        Task SaveGravity(GravityInfo gravity);
     }
 }

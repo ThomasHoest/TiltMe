@@ -8,25 +8,28 @@ namespace TiltMe.DataContext.Gravity
 {
     public class GravityData : TableDbContext, IGravityData
     {
-        private CloudTable _userTable;
+        private CloudTable _gravityTable;
         private IMapper _mapper;
 
         public GravityData(IApplicationConfiguration applicationConfiguration)
             : base(applicationConfiguration)
         {
-            _userTable = _tableClient.GetTableReference(nameof(GravityData));
-            _userTable.CreateIfNotExistsAsync();
+            _gravityTable = _tableClient.GetTableReference(nameof(GravityData));
+            _gravityTable.CreateIfNotExistsAsync();
             var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<GravityInfo, GravityTableInfo>();
+                cfg.CreateMap<GravityInfo, GravityTableInfo>()
+                    .ForMember(m => m.PartitionKey, s => s.MapFrom(si => si.SensorId))
+                    .ForMember(m => m.RowKey, s => s.MapFrom(si => si.Id));
                 cfg.CreateMap<GravityTableInfo, GravityInfo>();
             });
             _mapper = new Mapper(config);
 
         }
 
-        public Task SaveGravity(int gravity, string sensorId)
+        public async Task SaveGravity(GravityInfo gravity)
         {
-            throw new System.NotImplementedException();
+            GravityTableInfo gravityTableInfo = _mapper.Map<GravityTableInfo>(gravity);
+            await Insert(_gravityTable, gravityTableInfo);
         }
     }
 }

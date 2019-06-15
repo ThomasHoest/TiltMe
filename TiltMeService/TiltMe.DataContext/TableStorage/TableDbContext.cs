@@ -68,6 +68,24 @@ namespace TiltMe.DataContext.TableStorage
             return default(T);
         }
 
+        protected async Task<T> Get<T>(CloudTable table, T entity) where T : ITableEntity
+        {
+            try
+            {
+                TableOperation get = TableOperation.Retrieve<T>(entity.PartitionKey, entity.RowKey);
+                TableResult result = await table.ExecuteAsync(get);
+                if (result.Result != null)
+                {
+                    return (T)result.Result;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Trace.TraceError("Error getting entity", e);
+            }
+            return default(T);
+        }
+
         protected async Task<bool> Insert<T>(CloudTable table, T entity) where T : ITableEntity
         {
             try
