@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.WindowsAzure.Storage.Table;
 using TiltMe.DataContext.TableStorage;
@@ -45,6 +46,12 @@ namespace TiltMe.DataContext.Sensor
             SensorTableInfo sensor = new SensorTableInfo(sensorId, ownerEmail);
             sensor = await Get(_sensorTable, sensor);
             return _mapper.Map<SensorInfo>(sensor);
+        }
+
+        public async Task<IList<SensorInfo>> GetSensors(string ownerEmail)
+        {
+            var sensors = await GetAll<SensorTableInfo>(_sensorTable, ownerEmail);
+            return _mapper.Map<IList<SensorTableInfo>, IList<SensorInfo>>(sensors);
         }
     }
 }

@@ -19,6 +19,7 @@
 
 //#include "libraries/httpserver/httpserver.h"
 #include "wifimanager.h"
+#include "restclient.h"
 #include "httpserver.h"
 #include "Scheduler.h"
 
@@ -30,15 +31,11 @@ int ledPin = 03;
 HttpServer *_httpServer;
 WifiManager *_wifiManager;
 Scheduler *_scheduler;
+RestClient *_restClient;
 
 void testLoop()
 {
-    Serial.println("testloop 1");
-}
-
-void testLoop2()
-{
-    Serial.println("testloop 2");
+    _restClient->SaveGravity(42);
 }
 
 void setup()
@@ -52,10 +49,13 @@ void setup()
     _wifiManager->Connect();
     _wifiManager->StartServer();
     _httpServer = new HttpServer(_wifiManager);
+    _restClient = new RestClient("https://tiltmeservice.azurewebsites.net/");
+    _restClient->Initialize(_wifiManager->GetMacAddress());
+
 
     _scheduler = new Scheduler();    
     _scheduler->ScheduleTask(testLoop, 1000);
-    _scheduler->ScheduleTask(testLoop2, 4500);
+    
 }
 
 void loop()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 using AutoMapper.Configuration;
@@ -66,6 +67,37 @@ namespace TiltMe.DataContext.TableStorage
                 System.Diagnostics.Trace.TraceError("Error getting entity", e);                
             }
             return default(T);
+        }
+
+        protected async Task<IList<T>> GetAll<T>(CloudTable table, string partitionKey) where T : ITableEntity, new()
+        {
+            try
+            {
+                String partitionFilter = TableQuery.GenerateFilterCondition(
+                    "PartitionKey",
+                    QueryComparisons.Equal,
+                    partitionKey);
+
+                var tableQuery = new TableQuery<T>().Where(partitionFilter);
+                TableContinuationToken token = null;
+                List<T> items = new List<T>();
+
+                do
+                {
+                    TableQuerySegment<T> seg = await table.ExecuteQuerySegmentedAsync<T>(tableQuery, token);
+                    token = seg.ContinuationToken;
+                    items.AddRange(seg);
+
+                } while (token != null);
+
+                return items;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Trace.TraceError("Error getting entity", e);
+            }
+
+            return null;
         }
 
         protected async Task<T> Get<T>(CloudTable table, T entity) where T : ITableEntity

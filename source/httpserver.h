@@ -33,7 +33,6 @@ class HttpServer
 
     private:
     WifiManager *_manager;
-    int _ledValue;
 };
 
 #endif

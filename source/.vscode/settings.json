@@ -1,3 +1,7 @@
 {
-    "arduino.additionalUrls":"http://arduino.esp8266.com/stable/package_esp8266com_index.json",      
+    "arduino.additionalUrls": "http://arduino.esp8266.com/stable/package_esp8266com_index.json",
+    "files.associations": {
+        "*.tcc": "cpp"
+    },
+    
 }

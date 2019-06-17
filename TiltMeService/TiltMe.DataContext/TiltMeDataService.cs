@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TiltMe.DataContext.Gravity;
 using TiltMe.DataContext.Sensor;
@@ -28,6 +29,11 @@ namespace TiltMe.DataContext
         public Task<SensorInfo> GetSensor(string sensorId)
         {
             return _sensorData.GetSensorById(sensorId, _ownerEmail);
+        }
+
+        public Task<IList<SensorInfo>> GetSensors()
+        {
+            return _sensorData.GetSensors(_ownerEmail);
         }
 
         public async Task CreateMeasurement(string sensorId, int gravity)

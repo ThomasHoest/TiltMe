@@ -43,6 +43,12 @@ void WifiManager::Connect()
     
 }
 
+uint8_t *WifiManager::GetMacAddress()
+{
+    uint8_t mac[6];
+    return WiFi.macAddress(mac);
+}
+
 void WifiManager::StartServer()
 {
     _server = new WiFiServer(80);

@@ -30,6 +30,7 @@ class WifiManager
     void Connect();
     void StartServer();
     WiFiServer *GetServer();
+    uint8_t *GetMacAddress();
     
     private:
     char *_ssid;
