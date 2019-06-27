@@ -10,15 +10,7 @@
 #include <ESP8266WiFiScan.h>
 #include <ESP8266WiFiSTA.h>
 #include <ESP8266WiFiType.h>
-#include <WiFiClient.h>
-#include <WiFiClientSecure.h>
-#include <WiFiClientSecureAxTLS.h>
-#include <WiFiClientSecureBearSSL.h>
-#include <WiFiServer.h>
-#include <WiFiServerSecure.h>
-#include <WiFiServerSecureAxTLS.h>
-#include <WiFiServerSecureBearSSL.h>
-#include <WiFiUdp.h>
+
 
 class WifiManager
 {

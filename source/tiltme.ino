@@ -50,11 +50,10 @@ void setup()
     _wifiManager->StartServer();
     _httpServer = new HttpServer(_wifiManager);
     _restClient = new RestClient("https://tiltmeservice.azurewebsites.net/");
-    _restClient->Initialize(_wifiManager->GetMacAddress());
-
+    _restClient->Dhcp(_wifiManager->GetMacAddress());    
 
     _scheduler = new Scheduler();    
-    _scheduler->ScheduleTask(testLoop, 1000);
+    _scheduler->ScheduleTask(testLoop, 10000);
     
 }
 
