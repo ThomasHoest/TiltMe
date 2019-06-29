@@ -2,6 +2,8 @@
 
 using namespace std;
 
+#define HTTP_DEBUG
+
 #ifdef HTTP_DEBUG
 #define HTTP_DEBUG_PRINT(string) (Serial.print(string))
 #endif
@@ -56,8 +58,11 @@ RestClient::RestClient(const char *host, int port, int _ssl)
     }
 }
 
-bool RestClient::Dhcp(byte* mac){
-  if (Begin(mac) == 0) {
+bool RestClient::Dhcp()
+{
+    //84:0d:8e:8f:51:f9
+  byte mac[] = { 0x84, 0x0D, 0x8E, 0x8F, 0x51, 0xF9 };
+  if (begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
     return false;
   }
@@ -170,7 +175,7 @@ void RestClient::SetContentType(const char *contentTypeValue)
     _contentType = contentTypeValue;
 }
 
-void RestClient::setSSL(int ssl)
+void RestClient::SetSSL(int ssl)
 {
     _ssl = (ssl) ? 1 : 0;
 }
@@ -185,15 +190,10 @@ int RestClient::Request(const char *method, const char *path,
 
     if (_ssl)
     {
-        if (!_sslClient.connect(_host, _port))
-        {
-            HTTP_DEBUG_PRINT("HTTPS Connection failed\n");
-            return 0;
-        }
-        if (fingerprint)
+        if (_fingerprint)
         {
             HTTP_DEBUG_PRINT("Verifiying SSL certificate\n");
-            if (_sslClient.verify(_fingerprint, _host))
+            if (_sslClient.setFingerprint(_fingerprint))
             {
                 HTTP_DEBUG_PRINT("SSL certificate matches\n");
             }
@@ -203,6 +203,12 @@ int RestClient::Request(const char *method, const char *path,
                 return 0;
             }
         }
+
+        if (!_sslClient.connect(_host, _port))
+        {
+            HTTP_DEBUG_PRINT("HTTPS Connection failed\n");
+            return 0;
+        }        
     }
     else
     {

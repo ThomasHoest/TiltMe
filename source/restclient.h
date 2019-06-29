@@ -1,9 +1,10 @@
 #ifndef restclient_h
 #define restclient_h
 
-#include <Arduino.h>
+//#include <Arduino.h>
+#include <Ethernet.h>
 #include <ESP8266WiFi.h>
-#include <WiFiClientSecure.h>
+//#include <WiFi101.h>
 
 class RestClient
 {
@@ -21,9 +22,8 @@ public:
     //void SaveGravity(int gravity);
     
      //Client Setup
-    bool Dhcp(byte*);
-    int Begin(byte*);
-
+    bool Dhcp();
+    
     //Generic HTTP Request
     int Request(const char* method, const char* path,
                 const char* body, String* response);
