@@ -4,8 +4,6 @@
 #include <Wire.h>
 #include <MPU6050.h>
 
-#define INTERRUPT_PIN 15 // use pin 15 on ESP8266
-
 class Tilt
 {
     public:
@@ -15,6 +13,7 @@ class Tilt
 
     void Setup();
     void Read();
+    void Print();
     void DmpDataReady();
     
     private:

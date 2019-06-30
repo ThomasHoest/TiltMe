@@ -25,7 +25,6 @@ void Tilt::Setup()
     // initialize device
     Serial.println(F("Initializing I2C devices..."));
     _mpu.initialize();
-    pinMode(INTERRUPT_PIN, INPUT);
 
     // verify connection
     Serial.println(F("Testing device connections..."));
@@ -50,7 +49,7 @@ void Tilt::Setup()
 
         // enable Arduino interrupt detection
         Serial.println(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
-        
+
         _mpuIntStatus = _mpu.getIntStatus();
 
         // set our DMP Ready flag so the main loop() function knows it's okay to use it
@@ -89,6 +88,12 @@ void Tilt::Read()
     // get current FIFO count
     _fifoCount = _mpu.getFIFOCount();
 
+    // Serial.print("Status ");
+    // Serial.println(_mpuIntStatus);
+
+    // Serial.print("Fifo count ");
+    // Serial.println(_fifoCount);
+
     // check for overflow (this should never happen unless our code is too inefficient)
     if ((_mpuIntStatus & 0x10) || _fifoCount == 1024)
     {
@@ -113,13 +118,17 @@ void Tilt::Read()
 
         // display quaternion values in easy matrix form: w x y z
         _mpu.dmpGetQuaternion(&_q, _fifoBuffer);
-        Serial.print("quat\t");
-        Serial.print(_q.w);
-        Serial.print("\t");
-        Serial.print(_q.x);
-        Serial.print("\t");
-        Serial.print(_q.y);
-        Serial.print("\t");
-        Serial.println(_q.z);
     }
+}
+
+void Tilt::Print()
+{
+    Serial.print("quat\t");
+    Serial.print(_q.w);
+    Serial.print("\t");
+    Serial.print(_q.x);
+    Serial.print("\t");
+    Serial.print(_q.y);
+    Serial.print("\t");
+    Serial.println(_q.z);
 }

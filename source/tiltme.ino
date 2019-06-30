@@ -10,6 +10,7 @@
 const char *ssid = "**";             //your WiFi Name
 const char *password = "**"; //Your Wifi Password
 int ledPin = 03;
+#define INTERRUPT_PIN 4 // use pin 15 on ESP8266
 
 //WiFiServer server(80);
 HttpServer *_httpServer;
@@ -20,9 +21,8 @@ Tilt *_tilt;
 
 void testLoop()
 {
-    //_restClient->Post("/api/Gravity?value=32&sensorId=test2", "");
-
-    
+    _tilt->Print();
+    //_restClient->Post("/api/Gravity?value=32&sensorId=test2", "");    
 }
 
 void ICACHE_RAM_ATTR interrupt(){
@@ -45,11 +45,14 @@ void setup()
     _restClient->SetContentType("application/json");
 
     _scheduler = new Scheduler();    
-    _scheduler->ScheduleTask(testLoop, 10000);
+    _scheduler->ScheduleTask(testLoop, 500);
 
     _tilt = new Tilt();
+
+    pinMode(INTERRUPT_PIN, INPUT);
     attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), interrupt, RISING);
-    //_tilt->Setup();
+
+    _tilt->Setup();
     
 }
 
@@ -57,4 +60,5 @@ void loop()
 {
     _scheduler->Tick();
     _httpServer->CreateResponse();    
+    _tilt->Read();
 }
