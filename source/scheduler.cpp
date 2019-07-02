@@ -26,7 +26,6 @@ void Scheduler::Tick()
     {
         if( (_lastTick - nextTask->LastCall ) > nextTask->Interval )
         {
-            Serial.println("Executing task");
             nextTask->Task();
             nextTask->LastCall = _lastTick;            
         }

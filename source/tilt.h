@@ -4,21 +4,27 @@
 #include <Wire.h>
 #include <MPU6050.h>
 
+struct TiltValue
+{
+    float value;
+    TiltValue *next;
+};
+
+
 class Tilt
 {
-    public:
-    
+public:
     Tilt();
-    ~Tilt();    
+    ~Tilt();
 
     void Setup();
     void Read();
+    float GetTilt();
     void Print();
     void DmpDataReady();
-    
-    private:
-    
-    volatile bool _mpuInterrupt;     // indicates whether MPU interrupt pin has gone high
+
+private:
+    volatile bool _mpuInterrupt; // indicates whether MPU interrupt pin has gone high
 
     MPU6050 _mpu;
     bool _dmpReady = false;  // set true if DMP init was successful
@@ -28,12 +34,16 @@ class Tilt
     uint16_t _fifoCount;     // count of all bytes currently in FIFO
     uint8_t _fifoBuffer[64]; // FIFO storage buffer
 
-    Quaternion _q;           // [w, x, y, z]         quaternion container
-    VectorInt16 _aa;         // [x, y, z]            accel sensor measurements
-    VectorInt16 _aaReal;     // [x, y, z]            gravity-free accel sensor measurements
-    VectorInt16 _aaWorld;    // [x, y, z]            world-frame accel sensor measurements
-    VectorFloat _gravity;    // [x, y, z]            gravity vector
-
+    Quaternion _q;        // [w, x, y, z]         quaternion container
+    VectorInt16 _aa;      // [x, y, z]            accel sensor measurements
+    VectorInt16 _aaReal;  // [x, y, z]            gravity-free accel sensor measurements
+    VectorInt16 _aaWorld; // [x, y, z]            world-frame accel sensor measurements
+    VectorFloat _gravity; // [x, y, z]            gravity vector
+    float _euler[3]; // [psi, theta, phi]    Euler angle container
+    float _ypr[3]; // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
+    float _tilt;
+    TiltValue *_tiltValues;
+    int _slidingWindowSize;
 };
 
 #endif

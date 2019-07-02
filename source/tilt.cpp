@@ -5,6 +5,8 @@ using namespace std;
 Tilt::Tilt()
 {
     _mpuInterrupt = false;
+    _slidingWindowSize = 20;
+    _tiltValues = NULL;
 }
 
 Tilt::~Tilt()
@@ -87,13 +89,7 @@ void Tilt::Read()
 
     // get current FIFO count
     _fifoCount = _mpu.getFIFOCount();
-
-    // Serial.print("Status ");
-    // Serial.println(_mpuIntStatus);
-
-    // Serial.print("Fifo count ");
-    // Serial.println(_fifoCount);
-
+    
     // check for overflow (this should never happen unless our code is too inefficient)
     if ((_mpuIntStatus & 0x10) || _fifoCount == 1024)
     {
@@ -116,19 +112,81 @@ void Tilt::Read()
         // (this lets us immediately read more without waiting for an interrupt)
         _fifoCount -= _packetSize;
 
-        // display quaternion values in easy matrix form: w x y z
         _mpu.dmpGetQuaternion(&_q, _fifoBuffer);
+        _mpu.dmpGetGravity(&_gravity, &_q);
+        _mpu.dmpGetYawPitchRoll(_ypr, &_q, &_gravity);
+
+        float pitch = _ypr[1] * 180/M_PI;
+        float roll = _ypr[2] * 180/M_PI;
+
+        _tilt = sqrt(pitch * pitch + roll * roll);        
+
+        Serial.println("New value");
+        TiltValue *v = new TiltValue();
+        v->value = _tilt; 
+
+        if(_tiltValues == NULL)
+        {
+            _tiltValues = v;
+            return;
+        }
+
+        Serial.println("Adding to end");
+
+        //Add to end
+        TiltValue *n = _tiltValues;
+        int count = 1;
+
+        while(n->next != NULL)
+        {
+            n = n->next;
+            count++;
+        }
+
+        n->next = v;
+
+        //remove first item if above sliding window size
+        if(count > _slidingWindowSize)
+        {
+            Serial.println("Removing last");
+            TiltValue *itemToRemove = _tiltValues;
+            _tiltValues = _tiltValues->next;
+            delete itemToRemove;        
+        }
     }
+}
+
+float Tilt::GetTilt()
+{
+    if(_tiltValues == NULL)
+    {
+        return 0;
+    }
+
+    TiltValue *n = _tiltValues;
+
+    float sum = n->value;
+    int count = 1;
+
+    while(n->next != NULL)
+    {
+        n = n->next;
+        sum += n->value;
+        count++;
+    }
+
+    Serial.print("tilt: ");
+    Serial.println(sum);
+    Serial.print("count: ");
+    Serial.println(count);
+
+
+    return sum / count;
 }
 
 void Tilt::Print()
 {
-    Serial.print("quat\t");
-    Serial.print(_q.w);
-    Serial.print("\t");
-    Serial.print(_q.x);
-    Serial.print("\t");
-    Serial.print(_q.y);
-    Serial.print("\t");
-    Serial.println(_q.z);
+    Serial.print("tilt: ");
+    //Serial.print(GetTilt());
+    Serial.print("\n");    
 }
