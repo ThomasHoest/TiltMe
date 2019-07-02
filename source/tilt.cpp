@@ -121,7 +121,6 @@ void Tilt::Read()
 
         _tilt = sqrt(pitch * pitch + roll * roll);        
 
-        Serial.println("New value");
         TiltValue *v = new TiltValue();
         v->value = _tilt; 
 
@@ -130,8 +129,6 @@ void Tilt::Read()
             _tiltValues = v;
             return;
         }
-
-        Serial.println("Adding to end");
 
         //Add to end
         TiltValue *n = _tiltValues;
@@ -148,7 +145,6 @@ void Tilt::Read()
         //remove first item if above sliding window size
         if(count > _slidingWindowSize)
         {
-            Serial.println("Removing last");
             TiltValue *itemToRemove = _tiltValues;
             _tiltValues = _tiltValues->next;
             delete itemToRemove;        
@@ -175,18 +171,11 @@ float Tilt::GetTilt()
         count++;
     }
 
-    Serial.print("tilt: ");
-    Serial.println(sum);
-    Serial.print("count: ");
-    Serial.println(count);
-
-
     return sum / count;
 }
 
 void Tilt::Print()
 {
     Serial.print("tilt: ");
-    //Serial.print(GetTilt());
-    Serial.print("\n");    
+    Serial.println(GetTilt());
 }
