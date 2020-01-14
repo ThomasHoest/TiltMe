@@ -7,8 +7,8 @@
 #include "Scheduler.h"
 #include "tilt.h"
 
-const char *ssid = "**";             //your WiFi Name
-const char *password = "**"; //Your Wifi Password
+const char *ssid = "supernet";             //your WiFi Name
+const char *password = "thishouseisclean"; //Your Wifi Password
 int ledPin = 03;
 #define INTERRUPT_PIN 4 // use pin 15 on ESP8266
 
@@ -45,7 +45,7 @@ void setup()
     _restClient->SetContentType("application/json");
 
     _scheduler = new Scheduler();    
-    _scheduler->ScheduleTask(testLoop, 500);
+    _scheduler->ScheduleTask(testLoop, 2000);
 
     _tilt = new Tilt();
 
